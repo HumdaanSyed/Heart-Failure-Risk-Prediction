@@ -46,7 +46,7 @@ def predict():
 
     url = 'http://d637e8a9-cad4-4ce9-b5bc-46ffd5ece113.eastus2.azurecontainer.io/score'
     # Replace this with the primary/secondary key or AMLToken for the endpoint
-    api_key = 'BCazwhUjtogXlPTIXZyqIWZ7oxgwTKvL'
+    api_key = '[my api key]'
     if not api_key:
         raise Exception("A key should be provided to invoke the endpoint")
 
