@@ -39,14 +39,19 @@ The diagram below is a visualization of the rough overview of the operations tha
   to build, deploy, and manage machine learning models at scale. With Azure Machine
   Learning, users can use a range of tools and frameworks such as Python, R, and TensorFlow
   to create and deploy machine learning models.
+  
   Azure Machine Learning provides functionality for the following tasks:
+  
     1. Data preparation: Azure Machine Learning provides tools for cleaning, transforming,
       and pre-processing data for machine learning models.
+      
     2. Model training and tuning: Azure Machine Learning provides tools for training
       machine learning models and tuning their hyperparameters.
+      
     3. Model deployment: Azure Machine Learning provides tools for deploying machine
       learning models to a variety of environments, including cloud-based web services,
       containers, and edge devices.
+      
     4. Model monitoring and management: Azure Machine Learning provides tools for
       monitoring and managing machine learning models in production, including
       monitoring model performance and retraining models when necessary.
@@ -56,16 +61,20 @@ The diagram below is a visualization of the rough overview of the operations tha
   Flask is a popular web framework for building web applications and APIs in Python. Flask
   provides a simple and flexible way to handle HTTP requests and responses, and its
   lightweight design makes it easy to deploy and scale.
+  
   When deploying a Flask application, there are several options available. Here are some
   common deployment options:
+  
     1. Deploying on a traditional web server: Flask applications can be deployed on
       traditional web servers like Apache or Nginx. This typically involves using a WSGI
       server, such as Gunicorn, to handle the Flask application and proxy requests to the
       web server.
+      
     2. Deploying on a Platform as a Service (PaaS) provider: PaaS providers, such as
       Heroku or Google App Engine, offer managed environments for deploying web
       applications. These platforms provide preconfigured runtimes and services, making it
       easy to deploy and scale Flask applications without needing to manage infrastructure.
+      
     3. Deploying on a container platform: Flask applications can also be deployed in
       containers, such as Docker containers, and managed with container orchestration tools
       like Kubernetes. This approach provides a high level of flexibility and scalability, but
@@ -76,7 +85,9 @@ The diagram below is a visualization of the rough overview of the operations tha
   Python. It provides a comprehensive development environment for data scientists and
   scientific programmers, with a range of features for editing, debugging, and executing Python
   code.
+  
   Some of the key features of Spyder include:
+  
     1. Interactive console: Spyder provides an interactive console that allows users to
       execute Python code and view the results in real-time. This is particularly useful for
       exploring data and testing code snippets.
