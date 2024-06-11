@@ -5,13 +5,15 @@
 
 ## Table of contents
    * [Overview](#Overview)
+   * [System Requirements](#System-Requirements)
    * [Project Set Up and Installation](#Project-Set-Up-and-Installation)
    * [Dataset](#Dataset)
    * [Automated ML](#Automated-ML)
    * [Hyperparameter Tuning](#Hyperparameter-Tuning)
    * [Model Deployment](#Model-Deployment)
+   * [Flask Deployment](#Flask-Deployment)
+   * [Chatbot integration](#Chatbot-Integration)
    * [Screen Recording](#Screen-Recording)
-   * [Comments and future improvements](#Comments-and-future-improvements)
    * [Dataset Citation](#Dataset-Citation)
    * [References](#References)
 
@@ -21,11 +23,92 @@
 
 The current project uses machine learning to predict patients’ survival based on their medical data. 
 
-I create two models in the environment of Azure Machine Learning Studio: one using Automated Machine Learning (i.e. AutoML) and one customized model whose hyperparameters are tuned using HyperDrive. I then compare the performance of both models and deploy the best performing model as a service using Azure Container Instances (ACI).
+We created two models in the environment of Azure Machine Learning Studio: one using Automated Machine Learning (i.e. AutoML) and one customized model whose hyperparameters are tuned using HyperDrive. We then compare the performance of both models and deploy the best performing model as a service using Azure Container Instances (ACI).
 
 The diagram below is a visualization of the rough overview of the operations that take place in this project:
 
-![Project Workflow](img/Project_workflow.JPG?raw=true "Project Workflow") 
+![Project Workflow](images/Project_workflow.JPG?raw=true "Project Workflow") 
+
+
+## System Requirements
+
+● Microsoft Azure:
+  Microsoft Azure is a cloud computing platform that provides a wide range of services for
+  building, deploying, and managing applications and services through Microsoft-managed
+  data centers. Azure offers a suite of cloud services, including compute, storage, networking,
+  databases, analytics, and machine learning.
+  Azure Machine Learning is a cloud-based service that enables developers and data scientists
+  to build, deploy, and manage machine learning models at scale. With Azure Machine
+  Learning, users can use a range of tools and frameworks such as Python, R, and TensorFlow
+  to create and deploy machine learning models.
+  Azure Machine Learning provides functionality for the following tasks:
+    1. Data preparation: Azure Machine Learning provides tools for cleaning, transforming,
+      and pre-processing data for machine learning models.
+    2. Model training and tuning: Azure Machine Learning provides tools for training
+      machine learning models and tuning their hyperparameters.
+    3. Model deployment: Azure Machine Learning provides tools for deploying machine
+      learning models to a variety of environments, including cloud-based web services,
+      containers, and edge devices.
+    4. Model monitoring and management: Azure Machine Learning provides tools for
+      monitoring and managing machine learning models in production, including
+      monitoring model performance and retraining models when necessary.
+
+
+● Flask:
+  Flask is a popular web framework for building web applications and APIs in Python. Flask
+  provides a simple and flexible way to handle HTTP requests and responses, and its
+  lightweight design makes it easy to deploy and scale.
+  When deploying a Flask application, there are several options available. Here are some
+  common deployment options:
+    1. Deploying on a traditional web server: Flask applications can be deployed on
+      traditional web servers like Apache or Nginx. This typically involves using a WSGI
+      server, such as Gunicorn, to handle the Flask application and proxy requests to the
+      web server.
+    2. Deploying on a Platform as a Service (PaaS) provider: PaaS providers, such as
+      Heroku or Google App Engine, offer managed environments for deploying web
+      applications. These platforms provide preconfigured runtimes and services, making it
+      easy to deploy and scale Flask applications without needing to manage infrastructure.
+    3. Deploying on a container platform: Flask applications can also be deployed in
+      containers, such as Docker containers, and managed with container orchestration tools
+      like Kubernetes. This approach provides a high level of flexibility and scalability, but
+      also requires more advanced knowledge of containerization and orchestration.
+
+● Spyder:
+  Spyder is a popular Integrated Development Environment (IDE) for scientific computing in
+  Python. It provides a comprehensive development environment for data scientists and
+  scientific programmers, with a range of features for editing, debugging, and executing Python
+  code.
+  Some of the key features of Spyder include:
+    1. Interactive console: Spyder provides an interactive console that allows users to
+      execute Python code and view the results in real-time. This is particularly useful for
+      exploring data and testing code snippets.
+      
+    2. Code editor: Spyder includes a powerful code editor that provides features like syntax
+      highlighting, code completion, and code linting. It also includes support for multiple
+      file formats, including Python, Markdown, and HTML.
+      
+    3. Debugger: Spyder has a built-in debugger that allows users to step through code and
+      inspect variables and data structures at runtime. This makes it easier to find and fix
+      bugs in your code.
+      
+    4. Data exploration tools: Spyder includes tools for data exploration and analysis, such
+      as a variable explorer that allows users to view and manipulate data structures, and a
+      plotting library for creating visualizations.
+      
+    5. Integration with scientific libraries: Spyder integrates with popular scientific libraries,
+      such as NumPy, SciPy, and Matplotlib, making it a powerful tool for scientific
+      computing and data analysis.
+
+
+● Sublime Text:
+  Sublime Text is a popular text editor used by programmers and developers. It is known for its
+  sleek and minimalist user interface and powerful features, such as syntax highlighting,
+  auto-completion, multiple selections, and the ability to customize shortcuts and preferences.
+  Sublime Text supports a wide range of programming languages and file formats, making it a
+  versatile tool for various projects. It also has a large community of users who have developed
+  plugins and packages to extend its functionality even further. Sublime Text is available for
+  Windows, Mac, and Linux, and can be downloaded and used for free, although a license can
+  be purchased for additional features and support.
 
 
 ## Project Set Up and Installation
@@ -39,15 +122,11 @@ The following files are also necessary:
 
 - `heart_failure_clinical_records_dataset.csv`: the dataset file. It can also be taken directly from Kaggle; 
 - `train.py`: a basic script for manipulating the data used in the HyperDrive experiment;
-- `scoring_file_v_1_0_0.py`: the script used to deploy the model which is downloaded from within Azure Machine Learning Studio; &
+- `scoring.py`: the script used to deploy the model which is downloaded from within Azure Machine Learning Studio; &
 - `env.yml`: the environment file which is also downloaded from within Azure Machine Learning Studio.
 
 
 ## Dataset
-
-### Overview
-
-Cardiovascular diseases (CVDs) kill approximately 18 million people globally every year, being the number 1 cause of death globally. Heart failure is one of the two ways CVDs exhibit (the other one being myocardial infarctions) and occurs when the heart cannot pump enough blood to meet the needs of the body. People with cardiovascular disease or who are at high cardiovascular risk need early detection and management wherein Machine Learning would be of great help. This is what this project attempts to do: create an ML model that could help predicting patients’ survival based on their medical data.
 
 The dataset used is taken from [Kaggle](https://www.kaggle.com/andrewmvd/heart-failure-clinical-data) and -as we can read in the original [Research article](https://bmcmedinformdecismak.biomedcentral.com/articles/10.1186/s12911-020-1023-5)- the data comes from 299 patients with heart failure collected at the Faisalabad Institute of Cardiology and at the Allied Hospital in Faisalabad (Punjab, Pakistan), during April–December 2015. The patients consisted of 105 women and 194 men, and their ages range between 40 and 95 years old.
 
@@ -70,25 +149,21 @@ The dataset contains 13 features:
 | *DEATH_EVENT* | Whether the patient died during the follow-up period | Boolean (0=No, 1=Yes) |
 
 
-### Task 
-The main task that I seek to solve with this project & dataset is to classify patients based on their odds of survival. The prediction is based on the first 12 features included in the above table, while the classification result is reflected in the last column named _Death event (target)_ and it is either `0` (_`no`_) or `1` (_`yes`_).
-
-
 ### Access
 
-First, I made the data publicly accessible in the current GitHub repository via this link:
-[https://raw.githubusercontent.com/dimikara/heart-failure-prediction/master/heart_failure_clinical_records_dataset.csv](https://raw.githubusercontent.com/dimikara/heart-failure-prediction/master/heart_failure_clinical_records_dataset.csv)
+First, we made the data publicly accessible in the current GitHub repository via this link:
+[https://github.com/HumdaanSyed/Heart-Failure-Risk-Prediction/blob/main/heart_failure_clinical_records_dataset.csv](https://github.com/HumdaanSyed/Heart-Failure-Risk-Prediction/blob/main/heart_failure_clinical_records_dataset.csv)
 
-and then create the dataset: 
+and then link the dataset: 
 
-![Dataset creation](img/00.JPG?raw=true "heart-failure-prediction dataset creation")
+![Dataset creation](images/01.png?raw=true "heart-failure-prediction dataset creation")
 
 As it is depicted below, the dataset is registered in Azure Machine Learning Studio:
 
 ***Registered datasets:*** _Dataset heart-failure-prediction registered_
-![Registered datasets](img/04.JPG?raw=true "heart-failure-prediction dataset registered")
+![Registered datasets](images/02.png?raw=true "heart-failure-prediction dataset registered")
 
-I am also accessing the data directly via:
+We are also accessing the data directly via:
 
 ```
 data = pd.read_csv('./heart_failure_clinical_records_dataset.csv')
@@ -97,32 +172,28 @@ data = pd.read_csv('./heart_failure_clinical_records_dataset.csv')
 
 ***AutoML settings and configuration:***
 
-![AutoML settings & configuration](img/50.JPG?raw=true "AutoML settings & configuration")
+Automated Machine Learning (AutoML) is the process of automating the end-to-end process of
+applying machine learning to real-world problems. AutoML tools enable data scientists and
+non-experts to build machine learning models with minimal manual effort, by automating tasks such
+as feature engineering, model selection, and hyperparameter tuning.
+Some of the key uses of AutoML include:
+  1. Faster model development: AutoML tools can significantly reduce the time and effort
+    required to develop machine learning models, by automating tasks that would otherwise
+    require manual effort.
+  2. Increased accessibility: AutoML tools can democratize machine learning by making it more
+    accessible to non-experts, who may not have the technical expertise required to develop
+    machine learning models from scratch.
+  3. Improved model performance: AutoML tools can help to improve the performance of
+    machine learning models, by automating tasks such as hyperparameter tuning, which can be
+    time-consuming and error-prone when done manually.
+  4. Increased scalability: AutoML tools can help to scale machine learning models to larger
+    datasets and more complex problems, by automating tasks such as feature engineering, which
+    can become increasingly difficult as the complexity of the problem grows.
 
-Below you can see an overview of the `automl` settings and configuration I used for the AutoML run:
 
-```
-automl_settings = {"n_cross_validations": 2,
-                   "primary_metric": 'accuracy',
-                   "enable_early_stopping": True,
-                   "max_concurrent_iterations": 4,
-                   "experiment_timeout_minutes": 20,
-                   "verbosity": logging.INFO
-                  }
-```
+![AutoML settings & configuration](images/17.JPG?raw=true "AutoML settings & configuration")
 
-```
-automl_config = AutoMLConfig(compute_target = compute_target,
-                             task = 'classification',
-                             training_data = dataset,
-                             label_column_name = 'DEATH_EVENT',
-                             path = project_folder,
-                             featurization = 'auto',
-                             debug_log = 'automl_errors.log,
-                             enable_onnx_compatible_models = False
-                             **automl_settings
-                             )
-```
+Below you can see an overview of the `automl` settings and configuration we used for the AutoML run:
 
 `"n_cross_validations": 2`
 
@@ -178,83 +249,42 @@ The log file to write debug information to.
 
 `enable_onnx_compatible_models = False`
 
-I chose not to enable enforcing the ONNX-compatible models at this stage. However, I will try it in the future. For more info on Open Neural Network Exchange (ONNX), please see [here](https://docs.microsoft.com/en-us/azure/machine-learning/concept-onnx).
-
 
 ### Results
 
-During the AutoML run, the _Data Guardrails_ are run when automatic featurization is enabled. As we can see in the screenshot below, the dataset passed all three checks:
-
-***Data Guardrails Checks in the Notebook***
-![Data Guardrails Checks](img/40B.JPG?raw=true "Data Guardrails Checks in the Notebook")
-
-***Data Guardrails Checks in Azure Machine Learning Studio***
-![Data Guardrails Checks](img/40.JPG?raw=true "Data Guardrails Checks in Azure Machine Learning Studio")
-
-
 #### Completion of the AutoML run (RunDetails widget): 
 
-![AutoML completed](img/21.JPG?raw=true "AutoML completed: RunDetails widget")
+![Completion of the AutoML run (Run Details)](images/33.png?raw=true "AutoML completed: RunDetails widget")
 
-![AutoML completed](img/21B.JPG?raw=true "AutoML completed: RunDetails widget")
-
-![AutoML run models](img/51.JPG?raw=true "AutoML run models")
+![AutoML completed](images/05.png?raw=true "AutoML completed: RunDetails widget")
 
 #### Best model
 
 After the completion, we can see and take the metrics and details of the best run:
 
-![Best run metrics and details](img/54.JPG?raw=true "Best run metrics and details")
+![Best run metrics and details](images/30.png?raw=true "Best run metrics and details")
 
-![Best run properties](img/55.JPG?raw=true "Best run properties")
-
-![Fitted model parameters](img/56.JPG?raw=true "Fitted model parameters")
+![Best run properties](images/31.png?raw=true "Best run properties")
 
 Best model results:
 
 | AutoML Model | |
 | :---: | :---: |
-| id | AutoML_213153bb-f0e4-4be9-b265-6bbad4f0f9e4_40 |
-| Accuracy | 0.8595525727069351 |
-| AUC_weighted | 0.9087491748331944 |
+| id | AutoML_19c0a6e2-24a1-4698-b53b-122c354d1c1b |
+| Accuracy | 0.8629082774049217 |
+| AUC_weighted | 0.9006630037732388 |
 | Algorithm | VotingEnsemble |
 
 
-***Screenshots from Azure ML Studio***
-
-_AutoML models_
-
-![AutoML models](img/41.JPG?raw=true "AutoML models")
-
-_Best model data_
-
-![Best model data](img/39.JPG?raw=true "Best model data")
-
-_Best model metrics_
-
-![Best model metrics](img/38.JPG?raw=true "Best model metrics")
-
-_Charts_
-
-![Best model metrics - Charts](img/42.JPG?raw=true "Best model metrics - Charts")
-
-![Best model metrics - Charts](img/43.JPG?raw=true "Best model metrics - Charts")
-
-_Aggregate feature importance_
-
-![Best model metrics - Charts](img/44.JPG?raw=true "Best model metrics - Charts")
-
-As we can see, **time** is by far the **most important factor**, followed by serum creatinine and ejection fraction.
-
 ## Hyperparameter Tuning
 
-For this experiment I am using a custom Scikit-learn Logistic Regression model, whose hyperparameters I am optimising using HyperDrive. Logistic regression is best suited for binary classification models like this one and this is the main reason I chose it.
+For this experiment we used a custom Scikit-learn Logistic Regression model, whose hyperparameters I am optimising using HyperDrive. Logistic regression is best suited for binary classification models like this one and this is the main reason we chose it.
 
-I specify the parameter sampler using the parameters C and max_iter and chose discrete values with choice for both parameters.
+We specify the parameter sampler using the parameters C and max_iter and chose discrete values with choice for both parameters.
 
 **Parameter sampler**
 
-I specified the parameter sampler as such:
+We specified the parameter sampler as such:
 
 ```
 ps = RandomParameterSampling(
@@ -287,48 +317,16 @@ Any run that doesn't fall within the slack factor or slack amount of the evaluat
 ### Results
 #### Completion of the HyperDrive run (RunDetails widget):
 
-![HyperDrive run](img/11.JPG?raw=true "HyperDrive run")
+![HyperDrive RunDetails widget](images/34.png?raw=true "HyperDrive RunDetails widget")
 
-![HyperDrive run](img/12.JPG?raw=true "HyperDrive run")
-
-![HyperDrive RunDetails widget](img/HyperDrive_RunDetails_widget.JPG?raw=true "HyperDrive RunDetails widget")
-
-Please also see this video [here](https://youtu.be/WJWOOmHEOFg) where we can see that the RunDetails widget is enabled and the experiment is logging during its run until it shows 'Completed'. 
-
-#### Best model
-
-After the completion, we can see and get the metrics and details of the best run:
-
-![Best run metrics and details](img/15.JPG?raw=true "Best run metrics and details")
-
-![HyperDrive run hyperparameters](img/14.JPG?raw=true "HyperDrive run hyperparameters")
-
-![HyperDrive run hyperparameters](img/16.JPG?raw=true "HyperDrive run hyperparameters")
-
-Best model overview:
 
 | HyperDrive Model | |
 | :---: | :---: |
-| id | HD_debd4c29-658d-4280-b761-2308b5eff7e4_1 |
+| id | HD_cbb54a5f-5c10-4231-9ade-a6993093b96b_11 |
 | Accuracy | 0.8333333333333334 |
 | --C | 0.01 |
-| --max_iter | 300 |
+| --max_iter | 100 |
 
-***Screenshots from Azure ML Studio***
-
-_HyperDrive model_
-
-![HyperDrive model](img/17.JPG?raw=true "HyperDrive model")
-
-![HyperDrive model](img/46.JPG?raw=true "HyperDrive model")
-
-_Best model data and details_
-
-![Best model details](img/47.JPG?raw=true "Best model details")
-
-_Best model metrics_
-
-![Best model metrics](img/20.JPG?raw=true "Best model metrics")
 
 ## Model Deployment
 
@@ -347,24 +345,22 @@ Using as basis the `accuracy` metric, we can state that the best AutoML model is
 
 _Registered models in Azure Machine Learning Studio_
 
-![Registered models](img/23.JPG?raw=true "Registered models")
+![Registered models](images/35.jpg?raw=true "Registered models")
 
 _Runs of the experiment_
 
-![Runs of the experiment](img/25.JPG?raw=true "Runs of the experiment")
-
-![Best model deployment](img/22.JPG?raw=true "Best model deployment")
+![Runs of the experiment](images/36.jpg?raw=true "Runs of the experiment")
 
 ### Inference configuration
 
 The inference configuration defines the environment used to run the deployed model. The inference configuration includes two entities, which are used to run the model when it's deployed:
 
-![Inference configuration](img/62.JPG?raw=true "Inference configuration")
+![Inference configuration](images/37.jpg?raw=true "Inference configuration")
 
 - An entry script, named `scoring_file_v_1_0_0.py`.
 - An Azure Machine Learning environment, named `env.yml` in this case. The environment defines the software dependencies needed to run the model and entry script.
 
-![Inference configuration](img/63.JPG?raw=true "Inference configuration")
+![Inference configuration](images/38.jpg?raw=true "Inference configuration")
 
 ### Entry script
 
@@ -375,7 +371,7 @@ As compute target, I chose the Azure Container Instances (ACI) service, which is
 
 The AciWebservice Class represents a machine learning model deployed as a web service endpoint on Azure Container Instances. The deployed service is created from the model, script, and associated files, as I explain above. The resulting web service is a load-balanced, HTTP endpoint with a REST API. We can send data to this API and receive the prediction returned by the model.
 
-![Compute target](img/64.JPG?raw=true "Compute target")
+![Compute target](images/39.jpg?raw=true "Compute target")
 
 `cpu_cores` : It is the number of CPU cores to allocate for this Webservice. Can also be a decimal.
 
@@ -388,36 +384,28 @@ The AciWebservice Class represents a machine learning model deployed as a web se
 
 Bringing all of the above together, here is the actual deployment in action:
 
-![Model deployment](img/61.JPG?raw=true "Model deployment")
+![Model deployment](images/06.png?raw=true "Model deployment")
 
-_Best AutoML model deployed (Azure Machine Learning Studio)_
-
-![Best AutoML model deployed successfully](img/26.JPG?raw=true "Best AutoML model deployed successfully")
-
-![Best AutoML model deployed successfully](img/27.JPG?raw=true "Best AutoML model deployed successfully")
 
 Deployment takes some time to conclude, but when it finishes successfully the ACI web service has a status of ***Healthy*** and the model is deployed correctly. We can now move to the next step of actually testing the endpoint.
 ### Consuming/testing the endpoint (ACI service)
 
 _Endpoint (Azure Machine Learning Studio)_
 
-![ACI service](img/28.JPG?raw=true "ACI service")
+![ACI service](images/18.png?raw=true "ACI service")
 
 After the successful deployment of the model and with a _Healthy_ service, I can print the _scoring URI_, the _Swagger URI_ and the _primary authentication key_:
 
-![ACI service status and data](img/35.JPG?raw=true "ACI service status and data")
+![ACI service status and data](images/22.png?raw=true "ACI service status and data")
 
-The same info can be retrieved from Azure Machine Learning Studio as well:
-
-![ACI service details](img/33.JPG?raw=true "ACI service details")
 
 The scoring URI can be used by clients to submit requests to the service.
 
-In order to test the deployed model, I use a _Python_ file, named `endpoint.py`:
+In order to test the deployed model, we used a _Python_ file, named `endpoint.py`:
 
-![endpoint.py file](img/31.JPG?raw=true "endpoint.py file")
+![endpoint.py file](images/18.png?raw=true "endpoint.py file")
 
-In the beginning, I fill in the `scoring_uri` and `key` with the data of the _aciservice_ printed above. We can test our deployed service, using test data in JSON format, to make sure the web service returns a result.
+In the beginning, we fill in the `scoring_uri` and `key` with the data of the _aciservice_ printed above. We can test our deployed service, using test data in JSON format, to make sure the web service returns a result.
 
 In order to request data, the REST API expects the body of the request to be a JSON document with the following structure: 
 
@@ -429,25 +417,6 @@ In order to request data, the REST API expects the body of the request to be a J
         ]
 }
 ```
-In our case:
-
-![Data structure](img/65.JPG?raw=true "Data structure")
-
-The data is then converted to JSON string format:
-
-![Conversion to JSON string format](img/66.JPG?raw=true "Conversion to JSON string format")
-
-We set the content type:
-
-![Setting the content type](img/67.JPG?raw=true "Setting the content type")
-
-Finally, we make the request and print the response on screen:
-
-![Request and response](img/68.JPG?raw=true "Request and response")
-
-I execute Cell 21 and, based on the above, I expect to get a response in the format of `true` or `false`:
-
-![Running endpoint.py file within the cell](img/32.JPG?raw=true "Running endpoint.py file within the cell")
 
 In order to test the deployed service, one could use the above file by inserting data in the `endpoint.py` file, saving it, and then run the relevant cell in the `automl.ipynb` Jupyter Notebook.
 
@@ -455,46 +424,62 @@ In order to test the deployed service, one could use the above file by inserting
 
 **A third way** would also be to use Azure Machine Learning Studio. Go to the _Endpoints_ section, choose _aciservice_ and click on the tab _Test_:
 
-![Testing ACI service in Azure ML Studio](img/52.JPG?raw=true "Testing ACI service in Azure ML Studio")
+![Testing ACI service in Azure ML Studio](images/29.png?raw=true "Testing ACI service in Azure ML Studio")
 
 Fill in the empty fields with the medical data you want to get a prediction for and click _Test_:
 
-![Getting response](img/53.JPG?raw=true "Getting response")
+
+## Flask Deployment
+  Code:
+    ![Flask Deployment Code](images/41.jpg?raw=true "Flask Deployment Code")
+    ![Flask Deployment Code](images/42.jpg?raw=true "Flask Deployment Code")
+    ![Flask Deployment Code](images/43.jpg?raw=true "Flask Deployment Code")
+
+
+## Front-End of the Project
+  For the front-end of the project, the primary objective was to develop an interactive website that
+  can collect relevant data from the users and provide information and present an accurate
+  prediction based on the data given while keeping the website simple and free of confusion to
+  improve user comfort and experience.
+
+  The landing page is a simple and brief description of what the website is about. The top most
+  header area contains basic contact information along with some social media links.
+  
+  ![Landing Page](images/44.jpg?raw=true "Landing Page")
+
+  
+  The section ‘Predictor’ is where the main deployed model is consumed. In other words, the form
+  in this section is the main tool in gaining the user’s data and predicting it.
+  
+  The form takes values of all the different attributes that are used in the model building process
+  (For ex: Age, Diabetes, Smoking,Creatinine Phosphokinase etc.) and sends it to the python
+  script where the prediction is made and the output is sent back.
+  
+  ![Predictor Form](images/45.jpg?raw=true "Predictor Form")
+
+
+## Chatbot Integration
+
+Along with all the other features and functionalities mentioned about the site, a chatbot is also
+integrated for better user experience.
+
+This chatbot is integrated with chatGPT which is a huge trend these days.
+Integrating ChatGPT with social intents involves leveraging the capabilities of the language
+model to generate responses that are appropriate and contextually relevant to different types of
+social interactions.
+
+![Chatbot](images/46.jpg?raw=true "Chatbot")
 
 
 ## Screen Recording
 
-The screen recording can be found [here](https://youtu.be/5tuz2Itq0Ms) and it shows the project in action. 
+The screen recording can be found [here](https://youtu.be/qA46qczT0ak) and it shows the project in action. 
 
 More specifically, the screencast demonstrates:
 
 - A working model
 - Demo of the deployed  model
-- Demo of a sample request sent to the endpoint and its response
-
-
-## Comments and future improvements
-
-* The first factor that could improve the model is increasing the training time. This suggestion might be seen as a no-brainer, but it would also increase costs and this is a limitation that can be very difficult to overcome: there must always be a balance between minimum required accuracy and assigned budget.
-
-* Continuing the above point, it would be great to be able to experiment more with the hyperparameters chosen for the HyperDrive model or even try running it with more of the available hyperparameters, with less time contraints.
-
-* Another thing I would try is deploying the best models to the Edge using Azure IoT Edge and enabling logging in the deployed web apps.
-
-* I would certainly try to deploy the HyperDrive model as well, since the deployment procedure is a bit defferent than the one used for the AutoML model.
-
-* In the original Research article where this dataset was used it is mentioned that:
-> _Random Forests [...] turned out to be the top performing classifier on the complete dataset_
-
-I would love to further explore on this in order to create a model with higher accuracy that would give better and more reliable results, with potential practical benefits in the field of medicine.  
-
-* The question of how much training data is required for machine learning is always valid and, by all means, the dataset used here is rather small and geographically limited: it contains the medical records of only 299 patients and comes from only a specific geographical area. Increasing the sample size can mean higher level of accuracy and more reliable results. Plus, a dataset including data from patients from around the world would also be more reliable as it would compensate for factors specific to geographical regions.
-
-* Finally, although cheerful and taking into account gender equality, it would be great not to stumble upon issues like this:
-
-![Notebook not available](img/09.JPG?raw=true "Notebook not available")
-
-![Notebook not available](img/10.JPG?raw=true "Notebook not available")
+- Demo of a request sent using a Web Application
 
 
 ## Dataset Citation
@@ -504,7 +489,6 @@ Davide Chicco, Giuseppe Jurman: Machine learning can predict survival of patient
 
 ## References
 
-- Udacity Nanodegree material
 - Research article: [Machine learning can predict survival of patients with heart failure from serum creatinine and ejection fraction alone](https://bmcmedinformdecismak.biomedcentral.com/articles/10.1186/s12911-020-1023-5)
 - [Heart Failure Prediction Dataset](https://www.kaggle.com/andrewmvd/heart-failure-clinical-data)
 - [Consume an Azure Machine Learning model deployed as a web service](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-consume-web-service?tabs=python)
