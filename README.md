@@ -21,8 +21,6 @@
 
 ## Overview
 
-The current project uses machine learning to predict patients’ survival based on their medical data. 
-
 We created two models in the environment of Azure Machine Learning Studio: one using Automated Machine Learning (i.e. AutoML) and one customized model whose hyperparameters are tuned using HyperDrive. We then compare the performance of both models and deploy the best performing model as a service using Azure Container Instances (ACI).
 
 The diagram below is a visualization of the rough overview of the operations that take place in this project:
